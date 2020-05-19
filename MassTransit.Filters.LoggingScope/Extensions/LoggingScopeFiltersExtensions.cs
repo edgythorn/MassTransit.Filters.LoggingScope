@@ -12,6 +12,16 @@ namespace MassTransit
         private static Lazy<ScopeLoggerProvider> _scopeLogger = new Lazy<ScopeLoggerProvider>(() => new ScopeLoggerProvider());
 
         /// <summary>
+        /// Configure the pipeline to use a middleware that passes current logging scope from a producer to a consumer
+        /// </summary>
+        public static void UseLoggingScope(this IBusFactoryConfigurator configurator, IServiceProvider serviceProvider)
+        {
+            configurator.UseSendLoggingScope(serviceProvider);
+            configurator.UsePublishLoggingScope(serviceProvider);
+            configurator.UseConsumeLoggingScope(serviceProvider);
+        }
+
+        /// <summary>
         /// Configure the pipeline to use a filter that adds current logging scope to the headers of sended message
         /// </summary>
         public static void UseSendLoggingScope(this ISendPipelineConfigurator configurator, IServiceProvider serviceProvider) =>
